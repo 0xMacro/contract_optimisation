@@ -47,21 +47,21 @@ contract UnoptimizedContract {
         }
     }
 
-    function perHeadRateExceedsDeptMean(uint deptNum, uint rate) public view returns (bool)
+    function budgetPerHeadExceedsDeptMean(uint deptNum, uint budgetPerHead) public view returns (bool)
     {
         require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
         Department storage department = departments[deptNum];
-        return department.headCount > 0 && rate > ( department.budget / department.headCount );
+        return department.headCount > 0 && budgetPerHead > ( department.budget / department.headCount );
     }
     
-    function perHeadRateExceedsOverallMean(uint rate) public view returns (bool)
+    function budgetPerHeadExceedsOverallMean(uint budgetPerHead) public view returns (bool)
     {
-        return totalHeadCount > 0 && rate > ( totalBudget / totalHeadCount );
+        return totalHeadCount > 0 && budgetPerHead > ( totalBudget / totalHeadCount );
     }
     
-    function perHeadRateExceedsDeptOrOverallMean(uint deptNum, uint rate) external view returns (bool) {
+    function budgetPerHeadExceedsDeptOrOverallMean(uint deptNum, uint budgetPerHead) external view returns (bool) {
         require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
-        return perHeadRateExceedsOverallMean(rate) || perHeadRateExceedsDeptMean(deptNum, rate);
+        return budgetPerHeadExceedsOverallMean(budgetPerHead) || budgetPerHeadExceedsDeptMean(deptNum, budgetPerHead);
     }
 
 }
