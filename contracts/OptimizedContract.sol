@@ -15,7 +15,7 @@ contract OptimizedContract {
     Department[NUM_DEPTS + 1] departments;
 
     function setHeadCount(uint256 deptNum, uint256 newCount) external {
-        require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
+        if (deptNum == 0 || deptNum > NUM_DEPTS) revert InvalidDeptNum(deptNum);
         Department storage department = departments[deptNum];
         uint256 oldCount = department.headCount;
         if (newCount != oldCount) {
@@ -27,7 +27,7 @@ contract OptimizedContract {
     }
 
     function setBudget(uint256 deptNum, uint256 newBudget) external {
-        require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
+        if (deptNum == 0 || deptNum > NUM_DEPTS) revert InvalidDeptNum(deptNum);
         Department storage department = departments[deptNum];
         uint256 oldBudget = department.budget;
         if (newBudget != oldBudget) {
@@ -43,7 +43,7 @@ contract OptimizedContract {
         view
         returns (bool)
     {
-        require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
+        if (deptNum == 0 || deptNum > NUM_DEPTS) revert InvalidDeptNum(deptNum);
         Department storage department = departments[deptNum];
         return
             department.headCount > 0 &&
@@ -68,4 +68,6 @@ contract OptimizedContract {
             budgetPerHeadExceedsOverall(budgetPerHead) ||
             budgetPerHeadExceedsDept(deptNum, budgetPerHead);
     }
+
+    error InvalidDeptNum(uint256 deptNum);
 }
