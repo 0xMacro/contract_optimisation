@@ -3,19 +3,19 @@ pragma solidity ^0.8.2;
 
 contract UnoptimizedContract {
     
-    uint public totalHeadCount;
-    uint public totalBudget;
+    uint256 public totalHeadCount;
+    uint256 public totalBudget;
 
     struct Department {
-        uint headCount;
-        uint budget;
+        uint256 headCount;
+        uint256 budget;
     }
 
-    uint constant NUM_DEPTS = 20;
+    uint256 constant NUM_DEPTS = 20;
         
     Department[NUM_DEPTS + 1] departments;
 
-    function setHeadCount(uint deptNum, uint newCount) public {
+    function setHeadCount(uint256 deptNum, uint256 newCount) public {
         require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
         Department memory department = departments[deptNum];
         department.headCount = newCount;
@@ -23,7 +23,7 @@ contract UnoptimizedContract {
         updateTotalHeadCount();
     }
 
-    function setBudget(uint deptNum, uint newBudget) public {
+    function setBudget(uint256 deptNum, uint256 newBudget) public {
         require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
         Department memory department = departments[deptNum];
         department.budget = newBudget;
@@ -33,7 +33,7 @@ contract UnoptimizedContract {
 
     function updateTotalHeadCount() private {
         totalHeadCount = 0;
-        for ( uint deptNum = 1 ; deptNum <= NUM_DEPTS  ; deptNum++) {
+        for ( uint256 deptNum = 1 ; deptNum <= NUM_DEPTS  ; deptNum++) {
             Department memory department = departments[deptNum];
             totalHeadCount += department.headCount; 
         }
@@ -41,25 +41,25 @@ contract UnoptimizedContract {
 
     function updateTotalBudget() private {
         totalBudget = 0;
-        for ( uint deptNum = 1 ; deptNum <= NUM_DEPTS  ; deptNum++) {
+        for ( uint256 deptNum = 1 ; deptNum <= NUM_DEPTS  ; deptNum++) {
             Department memory department = departments[deptNum];
             totalBudget += department.budget; 
         }
     }
 
-    function budgetPerHeadExceedsDept(uint deptNum, uint budgetPerHead) public view returns (bool)
+    function budgetPerHeadExceedsDept(uint256 deptNum, uint256 budgetPerHead) public view returns (bool)
     {
         require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
         Department storage department = departments[deptNum];
         return department.headCount > 0 && budgetPerHead > ( department.budget / department.headCount );
     }
     
-    function budgetPerHeadExceedsOverall(uint budgetPerHead) public view returns (bool)
+    function budgetPerHeadExceedsOverall(uint256 budgetPerHead) public view returns (bool)
     {
         return totalHeadCount > 0 && budgetPerHead > ( totalBudget / totalHeadCount );
     }
     
-    function budgetPerHeadExceedsDeptOrOverall(uint deptNum, uint budgetPerHead) external view returns (bool) {
+    function budgetPerHeadExceedsDeptOrOverall(uint256 deptNum, uint256 budgetPerHead) external view returns (bool) {
         require(deptNum > 0 && deptNum <= NUM_DEPTS, "invalid deptNum");
         return budgetPerHeadExceedsOverall(budgetPerHead) || budgetPerHeadExceedsDept(deptNum, budgetPerHead);
     }
